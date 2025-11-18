@@ -10,7 +10,6 @@ def validate_number(number):
         return True
     return False
 
-
 print('Welcome to Calculator!')
 
 first_number = input("==> What is the 1st number? ")
