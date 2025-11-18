@@ -10,30 +10,45 @@ def validate_number(number):
         return True
     return False
 
+def validate_response(response):
+    if response in ["y", "n"]:
+        return True
+    else:
+        return False
+
 print('Welcome to Calculator!')
 
-first_number = input("==> What is the 1st number? ")
-while validate_number(first_number):
+while True:
     first_number = input("==> What is the 1st number? ")
+    while validate_number(first_number):
+        first_number = input("==> What is the 1st number? ")
 
-second_number = input("==> What is the 2nd number? ")
-while validate_number(second_number):
     second_number = input("==> What is the 2nd number? ")
+    while validate_number(second_number):
+        second_number = input("==> What is the 2nd number? ")
 
-operation = input("==> What operator? ")
-while operation not in ["+", "-", "*", "/"]:
     operation = input("==> What operator? ")
-result = 0
+    while operation not in ["+", "-", "*", "/"]:
+        operation = input("==> What operator? ")
+    result = 0
 
-match operation:
-    case "+":
-        result = int(first_number) + int(second_number)
-    case "-":
-        result = int(first_number) - int(second_number)
-    case "*":
-        result = int(first_number) * int(second_number)
-    case "/":
-        result = int(first_number) / int(second_number)
-    case _:
-        print("Invalid operator")
-print(result)
+    match operation:
+        case "+":
+            result = int(first_number) + int(second_number)
+        case "-":
+            result = int(first_number) - int(second_number)
+        case "*":
+            result = int(first_number) * int(second_number)
+        case "/":
+            result = int(first_number) / int(second_number)
+        case _:
+            print("Invalid operator")
+    print(result)
+
+    response = input("==> Again? (y/n): ")
+    while not validate_response(response):
+        response = input("==> Again? (y/n): ")
+    
+    if response == 'n':
+        break
+
