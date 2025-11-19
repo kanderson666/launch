@@ -1,7 +1,13 @@
 {
-    "welcome" : "Welcome to Calculator!",
-    "first_msg" : "==> What is the 1st number? ",
-    "second_msg" : "==> What is the 2nd number? ",
-    "operator" : "==> What operator? ",
-    "again" : "==> Again? (y/n): "
+    "EN" : {
+        "welcome": "Welcome to Calculator!",
+        "first_msg": "==> What is the 1st number? ",
+        "second_msg": "==> What is the 2nd number? ",
+        "operator": "==> What operator? ",
+        "again": "==> Again? (y/n): "
+    },
+    
+    "ES" : {
+        "welcome": "¡Bienvenido a la Calculadora!"
+    }
 }

@@ -20,22 +20,24 @@ def validate_response(response):
 
 # Open the JSON file for reading
 with open('calc_config.json', 'r') as file:
-    data = json.load(file)        
+    data = json.load(file)   
 
-print(data["welcome"])
+# manually setting language selection for welcome message to prove concept
+language = "ES"     
+print(data[language]["welcome"])
 
 while True:
-    first_number = input(data["first_msg"])
+    first_number = input(data["EN"]["first_msg"])
     while validate_number(first_number):
-        first_number = input(data["first_msg"])
+        first_number = input(data["EN"]["first_msg"])
 
-    second_number = input(data["second_msg"])
+    second_number = input(data["EN"]["second_msg"])
     while validate_number(second_number):
-        second_number = input(data["second_msg"])
+        second_number = input(data["EN"]["second_msg"])
 
-    operation = input(data["operator"])
+    operation = input(data["EN"]["operator"])
     while operation not in ["+", "-", "*", "/"]:
-        operation = input(data["operator"])
+        operation = input(data["EN"]["operator"])
     
     result = 0
     match operation:
@@ -51,9 +53,9 @@ while True:
             print("Invalid operator")
     print(result)
 
-    response = input(data["again"])
+    response = input(data["EN"]["again"])
     while not validate_response(response):
-        response = input(data["again"])
+        response = input(data["EN"]["again"])
     
     if response == 'n':
         break
