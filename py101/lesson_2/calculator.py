@@ -7,7 +7,7 @@ import json
 
 def validate_number(number):
     try:
-        int(number)
+        float(number)
     except ValueError:
         return True
     return False
@@ -42,13 +42,13 @@ while True:
     result = 0
     match operation:
         case "+":
-            result = int(first_number) + int(second_number)
+            result = float(first_number) + float(second_number)
         case "-":
-            result = int(first_number) - int(second_number)
+            result = float(first_number) - float(second_number)
         case "*":
-            result = int(first_number) * int(second_number)
+            result = float(first_number) * float(second_number)
         case "/":
-            result = int(first_number) / int(second_number)
+            result = float(first_number) / float(second_number)
         case _:
             print("Invalid operator")
     print(result)
