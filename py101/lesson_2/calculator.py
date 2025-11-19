@@ -15,16 +15,15 @@ def validate_number(number):
 def validate_response(response):
     if response in ["y", "n"]:
         return True
-    else:
-        return False
+    return False
 
 # Open the JSON file for reading
 with open('calc_config.json', 'r') as file:
-    data = json.load(file)   
+    data = json.load(file)
 
 # manually setting language selection for welcome message to prove concept
-language = "ES"     
-print(data[language]["welcome"])
+LANGUAGE = "ES"
+print(data[LANGUAGE]["welcome"])
 
 while True:
     first_number = input(data["EN"]["first_msg"])
@@ -38,7 +37,7 @@ while True:
     operation = input(data["EN"]["operator"])
     while operation not in ["+", "-", "*", "/"]:
         operation = input(data["EN"]["operator"])
-    
+
     result = 0
     match operation:
         case "+":
@@ -56,7 +55,6 @@ while True:
     response = input(data["EN"]["again"])
     while not validate_response(response):
         response = input(data["EN"]["again"])
-    
+
     if response == 'n':
         break
-
