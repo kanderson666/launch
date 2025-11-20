@@ -1,0 +1,7 @@
+{
+    "loan" : "Enter total loan amount: $",
+    "interest" : "Enter the annual interest rate: %",
+    "float_issue" : "Numbers only",
+    "duration" : "How many years? ",
+    "int_issue" : "Whole numbers only"
+}
