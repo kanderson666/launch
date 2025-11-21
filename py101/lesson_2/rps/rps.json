@@ -1,0 +1,5 @@
+{
+    "ready?" : "Welcome. Ready to play? [y/n]: ",
+    "error" : "Select one of the 5 options.",
+    "again?" : "Play again? [y/n]: "
+}
