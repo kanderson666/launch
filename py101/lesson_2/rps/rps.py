@@ -1,15 +1,15 @@
 import json
 import random
 
-CHOICES_LIST = ['rock [r]', 'paper [p]', 'scissors [sc]',
-                'spock [sp]', 'lizard [l]']
 CHOICES_DICT = {
-    'r' : 'rock',
-    'p' : 'paper',
-    'sc' : 'scissors',
-    'sp' : 'spock',
-    'l' : 'lizard'
+    'r' : 'rock [r]',
+    'p' : 'paper [p]',
+    'sc' : 'scissors [sc]',
+    'sp' : 'spock [sp]',
+    'l' : 'lizard [l]'
 }
+
+CHOICES_LIST = list(CHOICES_DICT.values())
 
 # Open the JSON file for reading
 with open('rps.json', 'r') as file:
@@ -23,7 +23,8 @@ def get_choice():
         except KeyError:
             print(MESSAGE['error'])
         else:
-            return weapon
+            weapon = weapon.split(' ') #remove the selection info
+            return weapon[0] #return just the weapon
 
 def get_comp():
     #randomly pick one of the 5 options
