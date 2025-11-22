@@ -1,7 +1,15 @@
 import json
 import random
 
-CHOICES = ['rock', 'paper', 'scissors', 'spock', 'lizard']
+CHOICES_LIST = ['rock [r]', 'paper [p]', 'scissors [sc]',
+                'spock [sp]', 'lizard [l]']
+CHOICES_DICT = {
+    'r' : 'rock',
+    'p' : 'paper',
+    'sc' : 'scissors',
+    'sp' : 'spock',
+    'l' : 'lizard'
+}
 
 # Open the JSON file for reading
 with open('rps.json', 'r') as file:
@@ -9,20 +17,33 @@ with open('rps.json', 'r') as file:
 
 def get_choice():
     while True:
-        weapon = input(f'{", ".join(CHOICES)}? ').casefold()
-        if weapon in CHOICES:
+        key = input(f'{", ".join(CHOICES_LIST)}? ').casefold()
+        try:
+            weapon = CHOICES_DICT[key]
+        except KeyError:
+            print(MESSAGE['error'])
+        else:
             return weapon
-        print(MESSAGE['error'])
 
 def get_comp():
-    return CHOICES[random.randint(0, 4)]
+    #randomly pick one of the 5 options
+    choice = CHOICES_LIST[random.randint(0, len(CHOICES_LIST) - 1)]
+    choice = choice.split(' ')  #remove the selection info
+    return choice [0]   #return just the weapon
+
+def get_index(choice):
+    #return index of chosen weapon in list of weapons
+    for i, weapon in enumerate(CHOICES_LIST):
+        if choice in weapon:
+            return i
+    return -1
 
 def determine_winner(play_choice, com_choice):
     if play_choice == com_choice:
         return "Tie"
 
-    play_index = CHOICES.index(play_choice)
-    com_index = CHOICES.index(com_choice)
+    play_index = get_index(play_choice)
+    com_index = get_index(com_choice)
 
     #adding any of these index offsets to your choice results in a win
     WIN_INDEXES = [-3, -1, 2, 4]
@@ -45,6 +66,7 @@ while 'y' in play:
     comp_choice = get_comp()
 
     winner = determine_winner(player_choice, comp_choice)
+
     if "Comp" in winner:
         comp_wins += 1
     elif "Player" in winner:
