@@ -1,5 +1,4 @@
 # Your code goes here
-from math import ceil
 MAX_LEN = 20
 
 def print_in_box(string):
