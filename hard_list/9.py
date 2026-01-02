@@ -10,21 +10,20 @@
 # - If an element is NOT a list, just append it.
 
 def flatten_one_level(lst):
-    pass  # your code here
-
+    if not lst:
+        return []
+    result = []
+    for item in lst:
+        if isinstance(item, list):
+            for nested in item:
+                result.append(nested)
+        else:
+            result.append(item)
+    return result
 
 # Test cases
-print(flatten_one_level([1, [2, 3], 4, [5, 6]]))
-# [1, 2, 3, 4, 5, 6]
-
-print(flatten_one_level([[1, 2], [3], [4, 5]]))
-# [1, 2, 3, 4, 5]
-
-print(flatten_one_level([1, 2, 3]))
-# [1, 2, 3]
-
-print(flatten_one_level([]))
-# []
-
-print(flatten_one_level([[1, [2, 3]], 4]))
-# [1, [2, 3], 4]  (only flattened one level, inner [2, 3] stays)
+print(flatten_one_level([1, [2, 3], 4, [5, 6]])) # [1, 2, 3, 4, 5, 6]
+print(flatten_one_level([[1, 2], [3], [4, 5]])) # [1, 2, 3, 4, 5]
+print(flatten_one_level([1, 2, 3])) # [1, 2, 3]
+print(flatten_one_level([])) # []
+print(flatten_one_level([[1, [2, 3]], 4])) # [1, [2, 3], 4]  (only flattened one level, inner [2, 3] stays)

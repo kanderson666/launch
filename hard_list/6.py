@@ -9,7 +9,15 @@
 # - The original list should not be modified.
 
 def rotate_right(lst, k):
-    pass  # your code here
+    if not lst:
+        return []
+    rotate = k % len(lst)
+    result = []
+    for i in range(-rotate, 0):
+        result.append(lst[i])
+    for i in range(0, len(lst) - rotate):
+        result.append(lst[i])
+    return result
 
 
 # Test cases

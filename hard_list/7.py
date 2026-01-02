@@ -11,7 +11,13 @@
 # - Do it “manually” using basic operations.
 
 def unique_in_order(lst):
-    pass  # your code here
+    if not lst:
+        return []
+    result = []
+    for item in lst:
+        if item not in result:
+            result.append(item)
+    return result
 
 
 # Test cases
