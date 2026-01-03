@@ -9,10 +9,10 @@ while True:
     else:
         break
 
-for i in range(size):
+for n in range(size):
     # prints digits forwards (4-6) 
     num_temp = num
-    num_temp //= (10**(size - i - 1))
+    num_temp //= (10**(size - n - 1))
 
     print(num_temp % 10)
 

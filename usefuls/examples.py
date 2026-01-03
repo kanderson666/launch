@@ -1,5 +1,5 @@
 def all_actions():
-    counter = 0
+    counter = 0 
 
     def increment_counter():
         nonlocal counter
