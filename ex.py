@@ -7,3 +7,4 @@ for char in statement:
         continue
     result[char] = result.get(char, 0) + 1
 print(result)
+print('hi')
