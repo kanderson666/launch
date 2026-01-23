@@ -12,26 +12,22 @@ dict1 = {
     'fourth': ['over', 'the', 'lazy', 'dog'],
 }
 
-result = ""
+result = []
 for lst in dict1.values():
     for string in lst:
         for char in string:
             if char in VOWELS:
-                result += char
-list_of_vowels = list(result)
-print(list_of_vowels)
+                result.append(char)
+print(result)
 
-# same as 1 comprehension
-list_of_vowels = [char for lst in dict1.values() 
-                        for string in lst 
-                            for char in string 
-                                if char in VOWELS]
-print(list_of_vowels)
+result = [char for lst in dict1.values() for string in lst for char in string if char in VOWELS]
+#for char in string for string in lst for lst in dict1.values() if char in VOWELS]
+print(result)
 
-# same as 1-line
-list_of_vowels = [char for lst in dict1.values() for string in lst for char in string if char in VOWELS]
-print(list_of_vowels)
-# ['e', 'u', 'i', 'o', 'o', 'u', 'e', 'o', 'e', 'e', 'a', 'o']
+# # same as 1-line
+# list_of_vowels = [char for lst in dict1.values() for string in lst for char in string if char in VOWELS]
+# print(list_of_vowels)
+# # ['e', 'u', 'i', 'o', 'o', 'u', 'e', 'o', 'e', 'e', 'a', 'o']
 
 
 # Expected:
