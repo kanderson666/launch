@@ -21,17 +21,24 @@ def play():
 
     player_turn(cards)
     if bust(cards, PLAYER):
+        display_hands(cards, DEALER)
+        print("Player bust! Dealer wins")
         return
-    comp_turn(cards)
 
-    
+    comp_turn(cards)
+    if bust(cards, DEALER):
+        display_hands(cards, DEALER)
+        print("Dealer bust! Player wins")
+        return
+
+    determine_winner(cards)
 
 def initialize_game():
     cards = [[], [0], [0], [0]]
     cards[DECK] = fresh_deck()
 
     deal(cards)
-    
+
     count_cards(cards, DEALER)
     count_cards(cards, DEALER_HIDDEN)
     count_cards(cards, PLAYER)
@@ -39,7 +46,7 @@ def initialize_game():
     return cards
 
 def fresh_deck():
-    deck = [str(num) for num in range(2, 11)] * NUM_SUITS + [face for face in FACES] * NUM_SUITS
+    deck = [str(num) for num in range(2, 11)] * NUM_SUITS + list(FACES) * NUM_SUITS
     random.shuffle(deck)
     return deck
 
@@ -71,10 +78,10 @@ def count_cards(cards, player):
 
 def convert_aces(total, num_aces):
     highest_value = 11 * num_aces  # if 1 ace, max value 11. If 2 aces, max value 22, etc
-    
+
     # repeat checks until all aces are of value 1
     while highest_value > num_aces:
-        if total + highest_value < LIMIT:
+        if total + highest_value <= LIMIT:
             break
         highest_value -= 10     # change 1 ace to value of 1
     return total + highest_value
@@ -91,31 +98,25 @@ def player_turn(cards):
 
 def comp_turn(cards):
     display_hands(cards, DEALER)
-    input("Press Enter to continue")
+    input("Press Enter to continue ")
 
-    while not bust(cards, DEALER) and cards[DEALER][HAND_SUM] < 17:
+    while cards[DEALER][HAND_SUM] < 17:
         hit(cards, DEALER)
         count_cards(cards, DEALER)
         display_hands(cards, DEALER)
-        input("Press Enter to continue")
-        
+        input("Press Enter to continue ")
 
 def bust(cards, player):
-    if cards[player][HAND_SUM] > 21:
-        display_hands(cards, DEALER)
-        if player == PLAYER:
-            print("Player bust!")
-        else:
-            print("Dealer bust!")
-        return True
-    return False
+    return cards[player][HAND_SUM] > 21
 
 def yes_or_no(question):
     while True:
-        response = input(question).casefold()
-        if response in YES_NO and (response[0] == 'y' or response[0] == 'n'):
+        response = input(question).casefold().strip()
+        if response == '':
+            pass
+        elif response in YES_NO and (response[0] == 'y' or response[0] == 'n'):
             return response
-        
+
         print("Please enter valid response.")
 
 def display_hands(cards, dealer):
@@ -125,6 +126,21 @@ def display_hands(cards, dealer):
     print("\nPlayer:")
     print(f"[{']['.join(cards[PLAYER][FIRST_CARD:]).rstrip('[')}] Total: {cards[PLAYER][HAND_SUM]}")
 
+def determine_winner(cards):
+    display_hands(cards, DEALER)
 
-play()
+    if cards[PLAYER][HAND_SUM] > cards[DEALER][HAND_SUM]:
+        print("Player wins!")
+    elif cards[PLAYER][HAND_SUM] < cards[DEALER][HAND_SUM]:
+        print("Dealer wins!")
+    else:
+        print("Tie!")
+
+while True:
+    play()
+
+    response = yes_or_no("\nPlay again? [y/n]: ")
+    if response[0] == 'n':
+        break
+
 print("Goodbye!")
