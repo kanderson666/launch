@@ -12,8 +12,10 @@ PLAYER = 3
 HAND_SUM = 0
 FIRST_CARD = 1
 LIMIT = 21
+DEALER_LIMIT = LIMIT - 4
 
 YES_NO = 'yesno'
+FIRST_TO = 3
 
 def play():
     cards = initialize_game()
@@ -22,16 +24,16 @@ def play():
     player_turn(cards)
     if bust(cards, PLAYER):
         display_hands(cards, DEALER)
-        print("Player bust! Dealer wins")
-        return
+        print("\nPlayer bust! Dealer wins")
+        return DEALER
 
     comp_turn(cards)
     if bust(cards, DEALER):
         display_hands(cards, DEALER)
-        print("Dealer bust! Player wins")
-        return
+        print("\nDealer bust! Player wins")
+        return PLAYER
 
-    determine_winner(cards)
+    return determine_winner(cards)
 
 def initialize_game():
     cards = [[], [0], [0], [0]]
@@ -100,14 +102,14 @@ def comp_turn(cards):
     display_hands(cards, DEALER)
     input("Press Enter to continue ")
 
-    while cards[DEALER][HAND_SUM] < 17:
+    while cards[DEALER][HAND_SUM] < DEALER_LIMIT:
         hit(cards, DEALER)
         count_cards(cards, DEALER)
         display_hands(cards, DEALER)
         input("Press Enter to continue ")
 
 def bust(cards, player):
-    return cards[player][HAND_SUM] > 21
+    return cards[player][HAND_SUM] > LIMIT
 
 def yes_or_no(question):
     while True:
@@ -130,16 +132,43 @@ def determine_winner(cards):
     display_hands(cards, DEALER)
 
     if cards[PLAYER][HAND_SUM] > cards[DEALER][HAND_SUM]:
-        print("Player wins!")
-    elif cards[PLAYER][HAND_SUM] < cards[DEALER][HAND_SUM]:
-        print("Dealer wins!")
-    else:
-        print("Tie!")
+        print("\nPlayer wins!")
+        return PLAYER
+
+    if cards[PLAYER][HAND_SUM] < cards[DEALER][HAND_SUM]:
+        print("\nDealer wins!")
+        return DEALER
+
+    print("\nTie!")
+    return None
+
+def display_wins(wins):
+    print(f'Player wins: {wins[PLAYER]}\tDealer wins: {wins[DEALER]}\n')
+
+def check_match_win(wins):
+    if wins[PLAYER] == FIRST_TO:
+        print('Player wins the match!')
+        wins[PLAYER] = 0
+        wins[DEALER] = 0
+
+    elif wins[DEALER] == FIRST_TO:
+        print('Dealer wins the match!')
+        wins[PLAYER] = 0
+        wins[DEALER] = 0
+
+wins = {PLAYER : 0,
+        DEALER : 0,
+        None : 0,
+}
 
 while True:
-    play()
+    winner = play()
 
-    response = yes_or_no("\nPlay again? [y/n]: ")
+    wins[winner] += 1
+    display_wins(wins)
+    check_match_win(wins)
+
+    response = yes_or_no("Play again? [y/n]: ")
     if response[0] == 'n':
         break
 
