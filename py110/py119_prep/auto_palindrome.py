@@ -36,7 +36,7 @@ A:
 import pdb
 from os import system
 
-DIGIT_LIMIT = 2
+DIGIT_LIMIT = 3     # 1 = 1,000      2 = 100,000  3 = 10,000,000
 LAST_NUM = 10**DIGIT_LIMIT
 
 def palindrome(result):
@@ -65,19 +65,24 @@ def special(result, size):
             num_string = num + add + num[::-1]
             result.append(num_string)
 
-def main():
-    result = []
+def check(result):
     checks = ['99', '999', '9999', '99999', '999999', '9999999', '99999999' '999999999']
-    palindrome(result)
     result.append("Done")
-        
+
     system("clear")
-    print(result)
+    # print(result)
+    print(result[-2])
+
     for idx, n in enumerate(result):
         for check in checks:
             if n == check:
                 print(idx, n)
                 print(idx + 1, result[idx + 1])
+def main():
+    result = []
+    palindrome(result)
+        
+    check(result)
 
 if __name__ == "__main__":
     main()
