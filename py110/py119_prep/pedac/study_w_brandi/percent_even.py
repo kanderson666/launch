@@ -27,7 +27,7 @@ Algo:
 """
 def evenPercent(limit):
     # 1-liner:
-    return f'{[ 0 for _ in range(1, limit, 2)].count(0) / limit if limit > 1 else "0":.2}'
+    return f'{len(range(1, limit, 2)) / limit if limit > 1 else "0":.2}'
 
     # Full write-out:
     # if limit < 2:
@@ -42,7 +42,7 @@ def evenPercent(limit):
     # return f'{percent:.2}'
 
     # Full 1-liner equivalent:
-    # return f'{[num % 2 for num in range(1, limit + 1) if num % 2 == 0].count(0)/limit if limit > 1 else "0":.2}'
+    # return f'{len([num for num in range(1, limit + 1) if num % 2 == 0]) / limit if limit > 1 else "0":.2}'
 
 # Python test cases:
 print(evenPercent(1) == '0')
