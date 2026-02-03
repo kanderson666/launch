@@ -43,18 +43,22 @@ Algo:
 """
 
 def bouncyCount(lst):
-    bouncy_count = 0
-    
+    count = 0
     for num in lst:
         if bouncy(num):
-            bouncy_count += 1
-    
-    return bouncy_count
-
+            count += 1
+    return count
+            
 def bouncy(num):
+    num = str(num)
+    
+    # utilize a set to improve efficiency with long #s
+    result = bouncy_set(num)
+    if result == True or result == False:
+        return result
+    
     ascend = False
     descend = False
-    num = str(num)
     last_digit = num[0]
 
     for digit in num:
@@ -63,12 +67,34 @@ def bouncy(num):
         elif digit < last_digit:
             descend = True
         last_digit = digit
-    
-    if ascend and descend:
-        return True
-    return False
         
-# Python test cases:
+        if ascend and descend:
+            return True
+    return False
+    
+def bouncy_set(num):
+    set_num = set(num)
+    length = len(set_num)
+    
+    match length:
+        case 0 | 1:
+            return False
+        case 2:
+            first_digit = num[0]
+            last_digit = num[-1]
+            if first_digit == last_digit:
+                return True
+        case _: 
+            first_digit = num[0]
+            highest = max(set_num)
+            lowest = min(set_num)
+
+            if first_digit > lowest and first_digit < highest:
+                return True
+    # undetermined if bouncy or not- needs additional testing
+    return None
+       
+# Python test cases
 print(bouncyCount([]) == 0)
 print(bouncyCount([11, 0, 345, 21]) == 0)
 print(bouncyCount([121, 4114]) == 2)
