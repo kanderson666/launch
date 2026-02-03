@@ -76,21 +76,20 @@ def bouncy_set(num):
     set_num = set(num)
     length = len(set_num)
     
-    match length:
-        case 0 | 1:
-            return False
-        case 2:
-            first_digit = num[0]
-            last_digit = num[-1]
-            if first_digit == last_digit:
-                return True
-        case _: 
-            first_digit = num[0]
-            highest = max(set_num)
-            lowest = min(set_num)
+    if length < 2:
+        return False
+    
+    first_digit = num[0]
+    last_digit = num[-1]
+    if first_digit == last_digit:
+        return True
 
-            if first_digit > lowest and first_digit < highest:
-                return True
+    highest = max(set_num)
+    lowest = min(set_num)
+
+    if first_digit > lowest and first_digit < highest:
+        return True
+
     # undetermined if bouncy or not- needs additional testing
     return None
        
