@@ -1,9 +1,10 @@
-def sum_square_difference(count):
-    sum = sum(range(1, count + 1))
+# set
+# update, remove, clear, union, intersection, difference, isdisjoint
 
-    sum_of_squares = 0
-    for i in range(1, count + 1):
-        sum_of_squares += i**2
+tuple1 = (1,2)
+set1= {1, 2, 3, 8, tuple1}
+set2 = {4, 5, 6, 7}
 
-    return sum**2 - sum_of_squares
-print(sum_square_difference(3))
+print(set1)
+print(set1 == set1.difference(set2))
+print(set1)
