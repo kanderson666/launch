@@ -21,7 +21,7 @@ my_dict2 = {5: 7, 8: 9, 10: 11}
 # print(my_dict.pop(3))
 # print(my_dict)
 
-# print(my_dict.popitem())
+print(my_dict.popitem())
 
 my_set = {1, 2, 3, 4, 5}
 my_set2 = {4, 5, 6, 7}

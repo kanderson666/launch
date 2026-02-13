@@ -24,6 +24,7 @@ Algo:
     - Return count
 
 """
+
 def count_substrings(string1, string2):
     count = 0
     start_idx = 0
@@ -34,7 +35,25 @@ def count_substrings(string1, string2):
     return count
     # return string1.count(string2) Works with built-in method
 
+"""
+Algo:
+    - Set start_idx to 0
+    - Repeat while string2 can fit in string1 from start_idx
+        - Check if slice from start_idx of string1 to len of string 2 matches string2
+            - If yes, add 1 to count, set start_idx to last char of match
+        - Increase start_idx by 1
 
+def count_substrings(string1, string2):
+    start_idx = 0
+    count = 0
+
+    while start_idx + len(string2) <= len(string1):
+        if string1[start_idx: start_idx + len(string2)] == string2:
+            count += 1
+            start_idx += len(string2) - 1
+        start_idx += 1
+    return count
+"""
 
 print(count_substrings('babab', 'bab') == 1)
 print(count_substrings('babab', 'ba') == 2)
@@ -45,3 +64,5 @@ print(count_substrings('', 'x') == 0)
 print(count_substrings('bbbaabbbbaab', 'baab') == 2)
 print(count_substrings('bbbaabbbbaab', 'bbaab') == 2)
 print(count_substrings('bbbaabbbbaabb', 'bbbaabb') == 1)
+
+
