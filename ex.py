@@ -1,41 +1,46 @@
-"""
-Dict methods:
-    Get, setdefault, update, pop/popitem 
-Set methods:
-    update, remove, union, intersection, isdisjoint
-"""
+class Pet:
+    def speak():
+        pass
 
-my_dict = {1: 2, 3: 4, 5: 6}
-my_dict2 = {5: 7, 8: 9, 10: 11}
+    def run(self):
+        return 'running!'
 
-# print(my_dict.get(3))
-# print(my_dict.get(4, "hi"))
+    def jump(self):
+        return 'jumping!'
 
-# print(my_dict.setdefault(3, 'hi'))
-# print(my_dict.setdefault(6, "hello"))
-# print(my_dict)
+    def sleep(self):
+        return 'sleeping!'
 
-# print(my_dict.update(my_dict2))
-# print(my_dict)
+class Dog(Pet):
+    def speak(self):
+        return 'bark!'
 
-# print(my_dict.pop(3))
-# print(my_dict)
+    def fetch(self):
+        return 'fetching!'
 
-# print(my_dict.popitem())
+class Bulldog(Dog):
+   def sleep(self):
+       return "snoring!"
 
-my_set = {1, 2, 3, 4, 5}
-my_set2 = {4, 5, 6, 7}
+class Cat(Pet):
+    def speak(self):
+        return 'meow!'
 
-# print(my_set.update(my_set2))
-# print(my_set)
+pet = Pet()
+dave = Dog()
+bud = Bulldog()
+kitty = Cat()
 
-# print(my_set.remove(4))
-# print(my_set)
-# print(my_set.remove(8))
+print(pet.run())              # running!
+print(kitty.run())            # running!
+print(kitty.speak())          # meow!
+try:
+    kitty.fetch()
+except Exception as exception:
+    print(exception.__class__.__name__, exception, "\n")
+    # AttributeError 'Cat' object has no attribute 'fetch'
 
-# print(my_set.union(my_set2))
-# print(my_set)
+print(dave.speak())           # bark!
 
-# print(my_set.intersection(my_set2))
-
-# print(my_set.isdisjoint(my_set2))
+print(bud.run())              # running!
+print(bud.sleep())             # "snoring!"
