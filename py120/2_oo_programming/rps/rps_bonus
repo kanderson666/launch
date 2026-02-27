@@ -1,0 +1,245 @@
+import random
+
+class Player:
+    
+    def __init__(self):
+        self.move = None
+        self.winner = False
+        self.score = 0
+
+    def __eq__(self, other):
+        if not isinstance(other, Player):
+            return NotImplemented
+        
+        if other.move == self.move:
+            return True
+        return False
+
+    def __gt__(self, other):
+        if not isinstance(other, Player):
+            return NotImplemented
+        
+        if other.move in Move.WINS[self.move]:
+            return True
+        return False
+    
+    def __lt__(self, other):
+        if not isinstance(other, Player):
+            return NotImplemented
+        if self.move in Move.WINS[other.move]:
+            return True
+        return False
+
+class Human(Player):
+    def __init__(self):
+        super().__init__()
+
+    def choose(self):
+        self.move = input('Rock, paper, scissors, lizard, or spock? ').lower()
+
+        while self.move not in Move.STR_CHOICES:
+            print('Invalid choice. Pick again\n')
+            self.move = input('Rock, paper, scissors, lizard, or spock? ').lower()
+
+        match self.move:
+            case 'rock':
+                self.move = Rock()
+            case 'paper':
+                self.move = Paper()
+            case 'scissors':
+                self.move = Scissors()
+            case 'lizard':
+                self.move = Lizard()
+            case 'spock':
+                self.move = Spock()
+
+class Computer(Player):
+    def __init__(self, name=None):
+        super().__init__()
+        self._name = name
+
+    def choose(self, last_human_move):
+        match self._name:
+            case None:
+                self.move = random.choice(Move.CLASS_CHOICES)
+            case 'R2D2':
+                self._r2d2()
+            case 'HAL':
+                self._hal()
+            case 'Daneel':
+                self._daneel(last_human_move)
+
+    def _r2d2(self):
+        self.move = Rock()
+
+    def _hal(self):
+        HAL_CHOICES = Move.CLASS_CHOICES + (Scissors(), Scissors())
+        self.move = random.choice(HAL_CHOICES)
+
+    def _daneel(self, last_human_move):
+        if last_human_move == None:
+            self.move = random.choice(Move.CLASS_CHOICES)
+            return
+        self.move = last_human_move
+
+class Rock:
+    def __repr__(self):
+        # return str(self)
+        return 'Rock()'
+    def __str__(self):
+        return 'Rock'
+
+    def __eq__(self, other):
+        return True if isinstance(other, Rock) else NotImplemented
+    def __hash__(self):
+        return hash(1)
+
+class Paper:
+    def __repr__(self):
+        return 'Paper()'
+    def __str__(self):
+        return 'Paper'
+
+    def __eq__(self, other):
+        return True if isinstance(other, Paper) else NotImplemented
+    def __hash__(self):
+        return hash(1)
+
+class Scissors:
+    def __repr__(self):
+        return 'Scissors()'
+    def __str__(self):
+        return 'Scissors'
+
+    def __eq__(self, other):
+        return True if isinstance(other, Scissors) else NotImplemented
+    def __hash__(self):
+        return hash(1)
+
+class Lizard:
+    def __repr__(self):
+        return 'Lizard()'
+    def __str__(self):
+        return 'Lizard'
+
+    def __eq__(self, other):
+        return True if isinstance(other, Lizard) else NotImplemented
+    def __hash__(self):
+        return hash(1)
+
+class Spock:
+    def __repr__(self):
+        return 'Spock()'
+    def __str__(self):
+        return 'Spock'
+
+    def __eq__(self, other):
+        return True if isinstance(other, Spock) else NotImplemented
+    def __hash__(self):
+        return hash(1)
+
+class Move:
+    CLASS_CHOICES = (Rock(), Paper(), Scissors(), Lizard(), Spock())
+    WINS = {
+            Rock() : [Scissors(), Lizard()],
+            Paper() : [Rock(), Spock()],
+            Scissors() : [Paper(), Lizard()],
+            Lizard() : [Paper(), Spock()],
+            Spock() : [Rock(), Scissors()],
+        }
+    STR_CHOICES = ('rock', 'paper', 'scissors', 'lizard', 'spock')
+    # WINS = {
+    #         'rock' : ['scissors', 'lizard'],
+    #         'paper' : ['rock', 'spock'],
+    #         'scissors' : ['paper', 'lizard'],
+    #         'lizard' : ['paper', 'spock'],
+    #         'spock' : ['rock', 'scissors'],
+    #     }
+
+class History:
+    def __init__(self):
+        self.list = []
+    def print(self):
+        num = 1
+        for move1, move2 in self.list:
+            print(f'{num}. {move1} vs {move2}')
+            num += 1
+    def add(self, move1, move2):
+        self.list.append((move1, move2))
+
+class RPSGame:
+    def __init__(self):
+        self._human = Human()
+        self._computer = Computer()
+        self._history = History()
+    
+    def play(self):
+        self._display_welcome_message()
+
+        while True:
+            self._computer.choose(self._human.move)
+            self._human.choose()
+
+            self._history.add(self._human.move, self._computer.move)
+
+            self._determine_winner()
+            self._display_winner()
+            self._check_best_of_winner()
+
+            self._history.print()
+
+            if not self._play_again():
+                break
+            print('----------------------------------------')
+
+        self._display_goodbye_message()
+
+    def _display_welcome_message(self):
+        print('Welcome to RPS')
+
+    def _display_goodbye_message(self):
+        print('Goodbye!')
+    
+    def _determine_winner(self):
+        if self._human < self._computer:
+            self._computer.winner = True
+            self._computer.score += 1
+        elif self._human > self._computer:
+            self._human.winner = True
+            self._human.score += 1
+
+    def _display_winner(self):
+
+        print(f'You chose: {self._human.move}')
+        print(f'The computer chose: {self._computer.move}')
+
+        if self._computer.winner:
+            print('Computer wins!')
+        elif self._human.winner:
+            print('You win!')
+        else:
+            print('Its a tie')
+
+        print(f'\nYou won {self._human.score} games')
+        print(f'Computer won {self._computer.score} games\n')
+
+    def _play_again(self):
+        if input('Play again? [y/n]: ').lower() != 'y':
+            return False
+        self._human.winner = False
+        self._computer.winner = False
+        return True
+        
+    def _check_best_of_winner(self):
+        if self._human.score == 2:
+            print('You have total victory!')
+        elif self._computer.score == 2:
+            print('Computer has total victory!')
+        else:
+            return
+        self._human.move = None
+        self._human.score = 0
+        self._computer.score = 0
+
+# RPSGame()
+RPSGame().play()
