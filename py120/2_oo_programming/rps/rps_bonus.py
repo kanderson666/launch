@@ -92,7 +92,7 @@ class Rock:
     def __eq__(self, other):
         return True if isinstance(other, Rock) else NotImplemented
     def __hash__(self):
-        return hash(1)
+        return hash('Rock')
 
 class Paper:
     def __repr__(self):
@@ -103,7 +103,7 @@ class Paper:
     def __eq__(self, other):
         return True if isinstance(other, Paper) else NotImplemented
     def __hash__(self):
-        return hash(1)
+        return hash('Paper')
 
 class Scissors:
     def __repr__(self):
@@ -114,7 +114,7 @@ class Scissors:
     def __eq__(self, other):
         return True if isinstance(other, Scissors) else NotImplemented
     def __hash__(self):
-        return hash(1)
+        return hash('Scissors')
 
 class Lizard:
     def __repr__(self):
@@ -125,7 +125,7 @@ class Lizard:
     def __eq__(self, other):
         return True if isinstance(other, Lizard) else NotImplemented
     def __hash__(self):
-        return hash(1)
+        return hash('Lizard')
 
 class Spock:
     def __repr__(self):
@@ -136,7 +136,7 @@ class Spock:
     def __eq__(self, other):
         return True if isinstance(other, Spock) else NotImplemented
     def __hash__(self):
-        return hash(1)
+        return hash('Spock')
 
 class Move:
     CLASS_CHOICES = (Rock(), Paper(), Scissors(), Lizard(), Spock())
@@ -203,9 +203,12 @@ class RPSGame:
     def _determine_winner(self):
         if self._human < self._computer:
             self._computer.winner = True
+            self._human.winner = False
             self._computer.score += 1
+
         elif self._human > self._computer:
             self._human.winner = True
+            self._computer.winner = False
             self._human.score += 1
 
     def _display_winner(self):
@@ -226,8 +229,6 @@ class RPSGame:
     def _play_again(self):
         if input('Play again? [y/n]: ').lower() != 'y':
             return False
-        self._human.winner = False
-        self._computer.winner = False
         return True
         
     def _check_best_of_winner(self):
