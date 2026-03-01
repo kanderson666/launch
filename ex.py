@@ -1,46 +1,34 @@
-class Pet:
-    def speak():
-        pass
+class Silly:
+    def __init__(self, value):
+        if isinstance(value, int):
+            self.value = value
+        else:
+            self.value = str(value)
 
-    def run(self):
-        return 'running!'
+    def __str__(self):
+        return f'Silly({repr(self.value)})'
 
-    def jump(self):
-        return 'jumping!'
+    def __add__(self, other):
+        if not isinstance(other, (str, int)):
+            return NotImplemented
+        value_is_num = self._is_num(self.value)
+        other_is_num = self._is_num(other)
+        
+        if value_is_num and other_is_num:
+            return Silly(int(self.value) + int(other))
+        else:
+            return Silly(str(self.value) + str(other))
+            
+    @staticmethod
+    def _is_num(value):
+        if isinstance(value, int) or value.isdigit():
+            return True
+        return False
 
-    def sleep(self):
-        return 'sleeping!'
-
-class Dog(Pet):
-    def speak(self):
-        return 'bark!'
-
-    def fetch(self):
-        return 'fetching!'
-
-class Bulldog(Dog):
-   def sleep(self):
-       return "snoring!"
-
-class Cat(Pet):
-    def speak(self):
-        return 'meow!'
-
-pet = Pet()
-dave = Dog()
-bud = Bulldog()
-kitty = Cat()
-
-print(pet.run())              # running!
-print(kitty.run())            # running!
-print(kitty.speak())          # meow!
-try:
-    kitty.fetch()
-except Exception as exception:
-    print(exception.__class__.__name__, exception, "\n")
-    # AttributeError 'Cat' object has no attribute 'fetch'
-
-print(dave.speak())           # bark!
-
-print(bud.run())              # running!
-print(bud.sleep())             # "snoring!"
+print(Silly('abc') + 'def')        # Silly('abcdef')
+print(Silly('abc') + 123)          # Silly('abc123')
+print(Silly(123) + 'xyz')          # Silly('123xyz')
+print(Silly('333') + 123)          # Silly(456)
+print(Silly(123) + '222')          # Silly(345)
+print(Silly(123) + 456)            # Silly(579)
+print(Silly('123') + '456')        # Silly(579)
