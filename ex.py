@@ -1,34 +1,20 @@
-class Silly:
-    def __init__(self, value):
-        if isinstance(value, int):
-            self.value = value
-        else:
-            self.value = str(value)
 
-    def __str__(self):
-        return f'Silly({repr(self.value)})'
+def join_or(list1, delim=', ', end='or'):
+    list1 = [str(item) for item in list1]
+    match len(list1):
+        case 0:
+            return ''
+        case 1:
+            return list1[0]
+        case 2:
+            return f'{list1[0]} {end} {list1[1]}'
+    
+    string = delim.join(list1[:-1])
+    string += f'{delim}{end} {list1[-1]}'
+    return string
+    
 
-    def __add__(self, other):
-        if not isinstance(other, (str, int)):
-            return NotImplemented
-        value_is_num = self._is_num(self.value)
-        other_is_num = self._is_num(other)
-        
-        if value_is_num and other_is_num:
-            return Silly(int(self.value) + int(other))
-        else:
-            return Silly(str(self.value) + str(other))
-            
-    @staticmethod
-    def _is_num(value):
-        if isinstance(value, int) or value.isdigit():
-            return True
-        return False
-
-print(Silly('abc') + 'def')        # Silly('abcdef')
-print(Silly('abc') + 123)          # Silly('abc123')
-print(Silly(123) + 'xyz')          # Silly('123xyz')
-print(Silly('333') + 123)          # Silly(456)
-print(Silly(123) + '222')          # Silly(345)
-print(Silly(123) + 456)            # Silly(579)
-print(Silly('123') + '456')        # Silly(579)
+print(join_or([1, 2]))                   # => "1 or 2"
+print(join_or([1, 2, 3]))                # => "1, 2, or 3"
+print(join_or([1, 2, 3], '; '))          # => "1; 2; or 3"
+print(join_or([1, 2, 3], ', ', 'and'))   # => "1, 2, and 3"
