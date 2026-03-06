@@ -133,7 +133,7 @@ class TTTGame:
             print("A tie game. How boring.")
 
     @staticmethod
-    def join_or(list1, delim=', ', end='or'):
+    def _join_or(list1, delim=', ', end='or'):
         list1 = [str(item) for item in list1]
         match len(list1):
             case 0:
@@ -153,7 +153,7 @@ class TTTGame:
         while True:
             choices_list = [str(choice) for choice in valid_choices]
             # choices_str = ", ".join(choices_list)
-            choices_str = TTTGame.join_or(choices_list)
+            choices_str = TTTGame._join_or(choices_list)
             prompt = f"Choose a square ({choices_str}): "
             choice = input(prompt)
 
