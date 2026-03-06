@@ -65,6 +65,10 @@ class Board:
     def count_markers_for(self, player, keys):
         markers = [self.squares[key].marker for key in keys]
         return markers.count(player.marker)
+    def last_square_needed(self, player, keys):
+        for key in keys:
+            if self.squares[key].marker != player.marker:
+                return key
 
 class Player:
     def __init__(self, marker):
@@ -89,6 +93,7 @@ class TTTGame:
         (1, 5, 9),  # diagonal: top-left to bottom-right
         (3, 5, 7),  # diagonal: top-right to bottom-left
     )
+    CENTER = 5
 
     def __init__(self):
         self.board = Board()
@@ -191,6 +196,47 @@ class TTTGame:
         self.board.mark_square_at(choice, self.human.marker)
 
     def computer_moves(self):
+        # Choose center tile first if available
+        if self._center_move():
+            return
+        # AI offense next
+        if self._offense():
+            return
+        # AI defense next
+        if self._defense():
+            return
+        # random choice last
+        self._random_move()
+
+    def _center_move(self):
+        valid_choices = self.board.unused_squares()
+        if TTTGame.CENTER in valid_choices:
+            self.board.mark_square_at(TTTGame.CENTER, self.computer.marker)
+            return True
+        return False
+
+    def _offense(self):
+        if self._tactical_comp_move(self.computer):
+            return True
+        return False
+    
+    def _defense(self):
+        if self._tactical_comp_move(self.human):
+            return True
+        return False
+
+    def _tactical_comp_move(self, player):
+        for row in TTTGame.POSSIBLE_WINNING_ROWS:
+            if self.board.count_markers_for(player, row) == 2: # comp/player
+                last_square = self.board.last_square_needed(player, row) # comp/player
+
+                valid_choices = self.board.unused_squares()
+                if last_square in valid_choices:
+                    self.board.mark_square_at(last_square, self.computer.marker)
+                    return True
+        return False
+    
+    def _random_move(self):
         valid_choices = self.board.unused_squares()
         choice = random.choice(valid_choices)
         self.board.mark_square_at(choice, self.computer.marker)
