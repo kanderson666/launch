@@ -96,9 +96,17 @@ class TTTGame:
         self.computer = Computer()
 
     def play(self):
-        clear_screen()
         self.display_welcome_message()
 
+        while True:
+            self.play_once()
+
+            if not self.play_again():
+                break
+            
+        self.display_goodbye_message()
+
+    def play_once(self):
         while True:
             self.board.display()
 
@@ -111,14 +119,27 @@ class TTTGame:
                 break
             clear_screen()
             print()
-
+        
         clear_screen()
         print()
+
         self.board.display()
         self.display_results()
-        self.display_goodbye_message()
+    
+    def play_again(self):
+        play_again = input('Play again? [y/n]: ')
+
+        if play_again == 'n':
+            return False
+
+        self.board = Board()
+        clear_screen()
+        print()
+
+        return True
 
     def display_welcome_message(self):
+        clear_screen()
         print("Welcome to Tic Tac Toe!")
 
     def display_goodbye_message(self):
