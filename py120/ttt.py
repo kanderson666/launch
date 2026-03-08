@@ -69,14 +69,17 @@ class Board:
         for key in keys:
             if self.squares[key].marker != player.marker:
                 return key
+        return None
 
 class Player:
     def __init__(self, marker):
         self.marker = marker
+        self.wins = 0
 
 class Human(Player):
     def __init__(self):
         super().__init__(Square.HUMAN_MARKER)
+        self.first = True
 
 class Computer(Player):
     def __init__(self):
@@ -94,11 +97,13 @@ class TTTGame:
         (3, 5, 7),  # diagonal: top-right to bottom-left
     )
     CENTER = 5
+    MATCH_WIN = 3
 
     def __init__(self):
         self.board = Board()
         self.human = Human()
         self.computer = Computer()
+        self.first_player = self.human
 
     def play(self):
         self.display_welcome_message()
@@ -106,31 +111,37 @@ class TTTGame:
         while True:
             self.play_once()
 
+            if self.match_won():
+                break
+
             if not self.play_again():
                 break
             
         self.display_goodbye_message()
 
     def play_once(self):
+        current_player = self.first_player
+        self.board.display()
+
         while True:
-            self.board.display()
+            self.player_moves(current_player)
 
-            self.human_moves()
-            if self.is_game_over():
-                break
-
-            self.computer_moves()
-            if self.is_game_over():
-                break
             clear_screen()
             print()
-        
-        clear_screen()
-        print()
+            self.board.display()
 
-        self.board.display()
+            if self.is_game_over():
+                break
+
+            current_player = self.toggle_player(current_player)
+        self.first_player = self.toggle_player(self.first_player)
         self.display_results()
-    
+            
+    def toggle_player(self, current_player):
+        if current_player == self.human:
+            return self.computer
+        return self.human
+
     def play_again(self):
         play_again = input('Play again? [y/n]: ')
 
@@ -143,6 +154,15 @@ class TTTGame:
 
         return True
 
+    def match_won(self):
+        if self.human.wins == TTTGame.MATCH_WIN:
+            return 'Player'
+            
+        if self.computer.wins == TTTGame.MATCH_WIN:
+            return 'Computer'
+
+        return False
+
     def display_welcome_message(self):
         clear_screen()
         print("Welcome to Tic Tac Toe!")
@@ -152,11 +172,18 @@ class TTTGame:
 
     def display_results(self):
         if self.is_winner(self.human):
+            self.human.wins += 1
             print("You won! Congratulations!")
         elif self.is_winner(self.computer):
+            self.computer.wins += 1
             print("I won! I won! Take that, human!")
         else:
             print("A tie game. How boring.")
+        print(f'Player wins: {self.human.wins}  Computer wins: {self.computer.wins}')
+
+        winner = self.match_won()
+        if winner:
+            print(f'\n{winner} wins the match of {TTTGame.MATCH_WIN}!')
 
     @staticmethod
     def _join_or(list1, delim=', ', end='or'):
@@ -172,6 +199,12 @@ class TTTGame:
         string = delim.join(list1[:-1])
         string += f'{delim}{end} {list1[-1]}'
         return string
+
+    def player_moves(self, current_player):
+        if current_player == self.human:
+            self.human_moves()
+        else:
+            self.computer_moves()
 
     def human_moves(self):
         choice = None
