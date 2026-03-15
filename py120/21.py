@@ -37,6 +37,7 @@ class Deck:
 class Participant:
     def __init__(self):
         self.reset()
+        self.hide_dealer = True
 
     def reset(self):
         self.score = 0
@@ -56,7 +57,8 @@ class Participant:
     def is_busted(self):
         return self.score > TwentyOneGame.MAX
 
-    def display_hand(self, hide_dealer=False):
+    def display_hand(self):
+        hide_dealer = self.hide_dealer
         hand = ''
         for card in self.hand:
             if self.name == 'Dealer' and hide_dealer:
@@ -66,6 +68,38 @@ class Participant:
 
             hand += f'[{card.num}] '
         print(f'{self.name}: {self.score} {hand}')
+
+    def sum_hand(self):
+        hide_first = True if self.hide_dealer else False
+        total = 0
+        aces = 0
+        for card in self.hand:
+            # skip totaling 1st card if want to hide dealer's 1st card
+            if self.name == 'Dealer' and hide_first:
+                hide_first = False
+                continue
+
+            elif card.num in Deck.FACE_RANKS:
+                total += 10
+
+            elif card.num == 'Ace':
+                aces += 1
+
+            else:
+                total += int(card.num)
+
+        total = self.compute_aces(total, aces)
+        self.score = total
+
+    @staticmethod
+    def compute_aces(total, num_aces):
+        num_ones = 0
+        total += num_aces * 11
+
+        while total > TwentyOneGame.MAX and num_ones != num_aces:
+            num_ones += 1
+            total -= 10
+        return total
 
 class Human(Participant):
     def __init__(self):
@@ -85,26 +119,27 @@ class TwentyOneGame:
         self.deck = Deck()
         self.human = Human()
         self.dealer = Dealer()
-        self.hide_dealer = True
 
     def start(self):
         self.display_welcome_message()
+        
         while True:
-            self.deal_cards()
-            self.sum_hands()
-            self.show_cards('Fresh deal')
-
-            self.human_turn()
-            self.dealer_turn()
-
+            self.play_once()
             self.display_result()
-            
             if not self.play_again():
                 break
-            
             self.reset()
 
         self.display_goodbye_message()
+
+    def play_once(self):
+        self.deal_cards()
+        self.human.sum_hand()
+        self.dealer.sum_hand()
+        self.show_cards('Fresh deal')
+
+        self.human_turn()
+        self.dealer_turn()
 
     def play_again(self):
         if self.human.money == 0 or self.human.money == 10:
@@ -118,7 +153,7 @@ class TwentyOneGame:
         self.human.reset()
         self.dealer.reset()
         self.deck = Deck()
-        self.hide_dealer = True
+        self.dealer.hide_dealer = True
 
     def deal_cards(self):
         self.human.hit(self.deck)
@@ -130,52 +165,17 @@ class TwentyOneGame:
         clear_screen()
         print(message)
         self.human.display_hand()
-        self.dealer.display_hand(self.hide_dealer)
-
-    def sum_hands(self):
-        self.sum_hand(self.human)
-        self.sum_hand(self.dealer)
-
-    def sum_hand(self, player):
-        hide_first = True if self.hide_dealer else False
-        total = 0
-        aces = 0
-        for card in player.hand:
-            # skip totaling 1st card if want to hide dealer's 1st card
-            if player.name == 'Dealer' and hide_first:
-                hide_first = False
-                continue
-
-            elif card.num in Deck.FACE_RANKS:
-                total += 10
-
-            elif card.num == 'Ace':
-                aces += 1
-
-            else:
-                total += int(card.num)
-
-        total = self.compute_aces(total, aces)
-        player.score = total
-        
-    def compute_aces(self, total, num_aces):
-        num_ones = 0
-        total += num_aces * 11
-
-        while total > TwentyOneGame.MAX and num_ones != num_aces:
-            num_ones += 1
-            total -= 10
-        return total
+        self.dealer.display_hand()
 
     def human_turn(self):
         hide_dealer = True
-        self.sum_hands()
+        self.human.sum_hand()
 
         while True:
             if self.get_user_input('Hit or stay?', ['h', 's']) == 's':
                 break
             self.human.hit(self.deck)
-            self.sum_hands()
+            self.human.sum_hand()
             self.show_cards('Human hits')
             if self.human.is_busted():
                 break
@@ -189,8 +189,8 @@ class TwentyOneGame:
         return user_input
 
     def dealer_turn(self):
-        self.hide_dealer = False
-        self.sum_hands()
+        self.dealer.hide_dealer = False
+        self.dealer.sum_hand()
 
         if self.human.is_busted():
             return
@@ -200,7 +200,7 @@ class TwentyOneGame:
 
         while self.dealer.score < 17 and not self.dealer.is_busted():
             self.dealer.hit(self.deck)
-            self.sum_hands()
+            self.dealer.sum_hand()
             self.show_cards('Dealer hits')
             input('\nPress enter to continue')
 
