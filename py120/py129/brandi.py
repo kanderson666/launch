@@ -121,7 +121,7 @@ class Magician(SpellMixin, Character):
         super().__init__(name)
         self._intel += 2
     
-class Bard(SpellMixin, Character):
+class Bard(Magician):
 # -   Paladins, magicians and bards can cast spells. They need access to a `cast_spell` method, that accepts one argument, `spell`.
 # -   Bards are a special type of magician that can also create potions. They have a `create_potion` method.
     def create_potion(self):
@@ -136,3 +136,5 @@ print(warrior)
 print(paladin)
 print(magician)
 print(bard)
+
+print(bard._Character__intel)
