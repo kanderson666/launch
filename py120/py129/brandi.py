@@ -50,32 +50,19 @@ class SpellMixin:
 #     -   a random intelligence value (between 2 and 12 inclusive)
 #     The random values are determined by a call to a `roll_dice` method that **shouldn't** be accessed outside of the class. The `roll_dice` method should not take any arguments.
 # @@@-   You can set and change the strength and intelligence in the constructors. However, once an object is constructed, the values may not change.
+#           - From Brandi: "I think if I were working on this as a take-home project and couldn't ask for clarification, I would default to the highest level of restriction."
 class Character:
     STARTING_HP = 100
 
     def __init__(self, name):
         self.name = name
         self._health = Character.STARTING_HP
-        self.str = self._roll_dice()
-        self._intel = self._roll_dice()
+        self.__str = self._roll_dice()
+        self.__intel = self._roll_dice()
 
     @staticmethod
     def _roll_dice():
         return random.randint(2, 12)
-
-    @property
-    def str(self):
-        return self._str
-    @str.setter
-    def str(self, new_value):
-        self._str = new_value
-
-    @property
-    def _intel(self):
-        return self.__intel
-    @_intel.setter
-    def _intel(self, new_value):
-        self.__intel = new_value
 
 # -   Health can only be changed by the methods `heal` and `hurt`. Each method accepts one argument, the amount of change to the health. 
 #     The `heal` increases the health value by the indicated amount, while the `hurt` decreases the value.
@@ -97,8 +84,8 @@ class Character:
         return (f'Name: {self.name}'
                 f'\nClass: {self.__class__.__name__}'
                 f'\nHealth: {self._health}'
-                f'\nStrength: {self.str}'
-                f'\nIntelligence: {self._intel}\n'
+                f'\nStrength: {self.__str}'
+                f'\nIntelligence: {self.__intel}\n'
         )
 
 # -   A player can be a warrior, a paladin, a magician, or a bard.
@@ -107,7 +94,7 @@ class Warrior(ArmourMixin, Character):
 # -   Warriors and paladins have the ability to wear armor. They need access to 2 additional methods: `attach_armor` and `remove_armor`.
     def __init__(self, name):
         super().__init__(name)
-        self.str += 2
+        self._Character__str += 2
 
 class Paladin(ArmourMixin, SpellMixin, Character):
 # -   Warriors and paladins have the ability to wear armor. They need access to 2 additional methods: `attach_armor` and `remove_armor`.
@@ -119,7 +106,7 @@ class Magician(SpellMixin, Character):
 # -   Paladins, magicians and bards can cast spells. They need access to a `cast_spell` method, that accepts one argument, `spell`.
     def __init__(self, name):
         super().__init__(name)
-        self._intel += 2
+        self._Character__intel += 2
     
 class Bard(Magician):
 # -   Paladins, magicians and bards can cast spells. They need access to a `cast_spell` method, that accepts one argument, `spell`.
@@ -137,4 +124,4 @@ print(paladin)
 print(magician)
 print(bard)
 
-print(bard._Character__intel)
+# print(bard._Character__intel)
