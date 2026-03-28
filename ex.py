@@ -1,13 +1,13 @@
-"""
-Create a function named print_message that requires a keyword-only argument (message) 
-and an optional keyword-only argument (level) with a default value of "INFO". 
-The function should print out the message prefixed with the level. 
-The function shouldn't accept any positional arguments.
-"""
+import re
 
-def print_message(*, message, level='INFO'):
-    return f'{level} {message}'
+text = ("A grey cat\n" +
+    "A blue caterpillar\n" +
+    "The lazy dog\n" +
+    "The white cat\n" +
+    "A loud dog\n" +
+    "--A loud dog\n" +
+    "Go away dog\n" +
+    "The ugly rat\n" +
+    "The lazy, loud dog")
 
-print(print_message(message='hello'))
-print(print_message(level=1, message='hello'))
-print(print_message(message='hello', level=1))
+print(re.findall(r"^(A|The) [a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z] (cat|dog)$", text, flags=re.M))
