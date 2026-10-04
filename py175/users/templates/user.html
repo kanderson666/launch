@@ -5,8 +5,9 @@
 
     {% for category in g.users_info[current_username] %}
         <p><strong>{{ category.capitalize() }}</strong>: 
-        {% if category == 'interests' %}
-            {{ ', '.join(g.users_info[current_username][category]) }}
+            <!-- Check if data is a list, if so, join with , -->
+            {% if g.users_info[current_username][category] is sequence and g.users_info[current_username][category] is not string %}
+            {{ g.users_info[current_username][category] | join(', ') }}
         {% else %}
             {{ g.users_info[current_username][category] }}
         {% endif %}

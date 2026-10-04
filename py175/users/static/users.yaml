@@ -10,6 +10,10 @@ nora:
     - cycling
     - basketball
     - economics
+  extras:
+    - one
+    - two
+    - three
 hiroko:
   email: hiroko.ohara@hotmail.com
   interests: []
