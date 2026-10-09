@@ -1,13 +1,17 @@
 {% extends 'layout.html' %}
 
+{% block header_links %}
+    <a class="add" href="{{ url_for('add_todo_list') }}">New List</a>
+{% endblock %}
+
 {% block content %}
     {% if lists %}
     <ul id="lists">
         {% for lst in lists %}
-            <li>
-                <a href="/lists/{{ lst.id }}">
+            <li class="{{'complete' if list_is_completed(lst) else ''}}">
+                <a href="{{ url_for('list_items', lst_id=lst.id) }}">
                     <h2>{{ lst.title }}</h2>
-                    <p>{{ lst.todos | length }}</p>
+                    <p>{{ items_remaining(lst) }} / {{ lst.todos | length }}</p>
                 </a>
             </li>
         {% endfor %}
@@ -17,6 +21,3 @@
     {% endif %}
 {% endblock %}
 
-{% block header_links %}
-    <a class="add" href="{{ url_for('add_todo_list') }}">New List</a>
-{% endblock %}

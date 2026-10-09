@@ -1,1 +1,57 @@
+<!-- code provided by https://launchschool.com/lessons/7131ac4b/assignments/9808c1d1 -->
 {% extends 'layout.html' %}
+
+{% block header_links %}
+    <a class="list" href="{{ url_for('get_lists') }}">All Lists</a>
+{% endblock %}
+
+{% block content %}
+    <section id="todos" class="{{'complete' if list_is_completed(desired_list) else ''}}">
+        <header> <!-- header contains title, complete all, and edit list functions -->
+            <h2 >{{ desired_list.title }}</h2>
+            <ul>
+                <li>
+                    <form class="complete_all" action="{{ url_for('check_all', lst_id=desired_list.id) }}" method="post">
+                        <button class="check" type="submit">Complete All</button>
+                    </form>
+                </li>
+                <li>
+                    <a class="edit" href="{{ url_for('edit_list', lst_id=desired_list.id) }}">Edit List</a>
+                </li>   
+            </ul>
+        </header>
+        <ul>
+            {% for item in desired_list.todos %}
+                <!-- todo item checkbox -->
+                <li class="{{'complete' if item.completed else ''}}">   <!-- class controls appearance of todo -->
+                    <form action="{{ url_for('check_item', lst_id=desired_list.id, item_id=item.id) }}" method="post" class="check">
+                        <input type="hidden" name="completed"/>
+                        <button type="submit">Complete</button>
+                    </form>  
+
+                    <!-- name of todo & delete button -->
+                    <h3>{{ item.title }}</h3>
+                    <form class="delete"
+                          action="{{ url_for('remove_list_item', lst_id=desired_list.id, item_id=item.id) }}"
+                          method="post">
+                      <button type="submit">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <form action="{{ url_for('add_list_item', lst_id=desired_list.id) }}" method="post">
+        <dl>
+            <dt>
+                <label for="todo_item">Enter a new todo item:</label>
+            </dt>
+            <dd>
+                <input type="text" name="todo_name" id="todo_name" placeholder="Something to do" value="{{ request.form['todo_name'] }}">
+            </dd>
+        </dl>
+        <fieldset class="actions">
+            <input type="submit" value="Add">
+        </fieldset>
+    </form>
+{% endblock %}
